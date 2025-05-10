@@ -46,7 +46,7 @@ public class AuthController {
     public ResponseEntity<?> resend(@RequestParam String email) {
         try {
             authenticationService.resendVerificationCode(email);
-            return ResponseEntity.ok("Account resend successfully");
+            return ResponseEntity.ok("Verification code resend successfully");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
