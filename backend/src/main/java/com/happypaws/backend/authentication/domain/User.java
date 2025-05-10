@@ -12,8 +12,9 @@ import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-@Builder(access = AccessLevel.PRIVATE)
+@Builder
 @Getter
+@Setter
 @Entity
 @Table(name = "users")
 public class User extends Auditable implements UserDetails {
