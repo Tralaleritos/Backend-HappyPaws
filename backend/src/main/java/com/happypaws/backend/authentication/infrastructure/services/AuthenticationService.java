@@ -44,6 +44,7 @@ public class AuthenticationService {
                 .email(registerUserDto.getEmail())
                 .phoneNumber(registerUserDto.getPhoneNumber())
                 .roles(List.of(role.get()))
+                .imgUrl(registerUserDto.getImgUrl())
                 .build();
         user.setVerificationCode(generateVerificationCode());
         user.setVerificationExpiration(LocalDateTime.now().plusMinutes(15));

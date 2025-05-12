@@ -39,4 +39,4 @@ server:
 security:
   jwt:
     secret-key: ${JWT_SECRET_KEY}
-    expiration-time: 3600
+    expiration-time: 3600000

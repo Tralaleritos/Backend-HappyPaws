@@ -37,6 +37,8 @@ public class User extends Auditable implements UserDetails {
     @Column(nullable = false)
     private String phoneNumber;
 
+    private String imgUrl;
+
     @Column(nullable = false)
     private String password;
 

@@ -2,8 +2,12 @@ package com.happypaws.backend.petmanager.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.happypaws.backend.authentication.domain.User;
+import com.happypaws.backend.offersmanager.domain.Offer;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
@@ -28,6 +32,9 @@ public class Pet {
     @JoinColumn(name = "owner_id", nullable = false)
     @JsonIgnore
     private User owner;
+
+    @ManyToMany(mappedBy = "pets", fetch = FetchType.LAZY)
+    private List<Offer> offers = new ArrayList<>();
 
     public static Pet Create(String name, String description, Species species, String breed, int age, User owner, String imgUrl) {
         return Pet.builder()
