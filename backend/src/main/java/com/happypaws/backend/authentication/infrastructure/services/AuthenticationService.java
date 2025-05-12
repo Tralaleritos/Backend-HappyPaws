@@ -1,6 +1,7 @@
 package com.happypaws.backend.authentication.infrastructure.services;
 
 import com.happypaws.backend.authentication.domain.User;
+import com.happypaws.backend.authentication.infrastructure.repositories.RoleRepository;
 import com.happypaws.backend.authentication.infrastructure.repositories.UserRepository;
 import com.happypaws.backend.authentication.presentation.dtos.LoginUserDto;
 import com.happypaws.backend.authentication.presentation.dtos.RegisterUserDto;
@@ -16,6 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
@@ -27,13 +29,21 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final EmailService emailService;
+    private final RoleRepository roleRepository;
 
     public User signUp(RegisterUserDto registerUserDto) {
+        var role = roleRepository.findByName(registerUserDto.getRole());
+
+        if (role.isEmpty()) {
+            throw new UsernameNotFoundException(registerUserDto.getUsername());
+        }
+
         User user = User.builder()
                 .username(registerUserDto.getUsername())
                 .password(passwordEncoder.encode(registerUserDto.getPassword()))
                 .email(registerUserDto.getEmail())
                 .phoneNumber(registerUserDto.getPhoneNumber())
+                .roles(List.of(role.get()))
                 .build();
         user.setVerificationCode(generateVerificationCode());
         user.setVerificationExpiration(LocalDateTime.now().plusMinutes(15));
