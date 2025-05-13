@@ -2,7 +2,7 @@ package com.happypaws.backend.offersmanager.application.caregivers.availability;
 
 import com.happypaws.backend.authentication.infrastructure.repositories.UserRepository;
 import com.happypaws.backend.offersmanager.domain.offers.Location;
-import com.happypaws.backend.offersmanager.infrastructure.CaregiverAvailabilityRepository;
+import com.happypaws.backend.offersmanager.infrastructure.repositories.CaregiverAvailabilityRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

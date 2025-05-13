@@ -2,7 +2,7 @@ package com.happypaws.backend.offersmanager.application.offers.getById;
 
 import com.happypaws.backend.offersmanager.application.offers.OfferMapper;
 import com.happypaws.backend.offersmanager.application.offers.create.OfferResponse;
-import com.happypaws.backend.offersmanager.infrastructure.OfferRepository;
+import com.happypaws.backend.offersmanager.infrastructure.repositories.OfferRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

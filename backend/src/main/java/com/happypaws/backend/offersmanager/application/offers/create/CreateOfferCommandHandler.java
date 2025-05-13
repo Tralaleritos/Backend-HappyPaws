@@ -1,21 +1,29 @@
 package com.happypaws.backend.offersmanager.application.offers.create;
 
+import com.happypaws.backend.authentication.domain.User;
 import com.happypaws.backend.authentication.infrastructure.repositories.UserRepository;
 import com.happypaws.backend.offersmanager.application.offers.OfferMapper;
 import com.happypaws.backend.offersmanager.domain.offers.Offer;
-import com.happypaws.backend.offersmanager.infrastructure.OfferRepository;
+import com.happypaws.backend.offersmanager.infrastructure.repositories.OfferRepository;
+import com.happypaws.backend.offersmanager.infrastructure.socketcontroller.NotificationController;
 import com.happypaws.backend.petmanager.infrastructure.PetRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @Transactional
 @RequiredArgsConstructor
+@Slf4j
 public class CreateOfferCommandHandler {
     private final OfferRepository offerRepository;
     private final UserRepository userRepository;
     private final PetRepository petRepository;
+    private final NotificationController notificationController;
+    private final AvailableCaregivers availableCaregivers;
 
     public OfferResponse handle(final CreateOfferCommand command) {
         final var owner = userRepository.findById(command.ownerId());
@@ -40,6 +48,16 @@ public class CreateOfferCommandHandler {
 
         final var offerSaved = offerRepository.save(offer);
 
-        return OfferMapper.fromEntity(offerSaved);
+        final var offerResult = OfferMapper.fromEntity(offerSaved);
+
+        final List<Long> caregiverIds = availableCaregivers.getAvailableCaregivers(offerSaved.getLocation());
+
+        log.info("Caregiver ids: {}", caregiverIds);
+
+        for (final var caregiverId : caregiverIds) {
+            notificationController.sendNotification(caregiverId, offerResult);
+        }
+
+        return offerResult;
     }
 }

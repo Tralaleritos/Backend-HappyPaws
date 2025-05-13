@@ -1,4 +1,4 @@
-package com.happypaws.backend.offersmanager.infrastructure;
+package com.happypaws.backend.offersmanager.infrastructure.repositories;
 
 import com.happypaws.backend.offersmanager.domain.offers.Offer;
 import org.springframework.data.jpa.repository.JpaRepository;
