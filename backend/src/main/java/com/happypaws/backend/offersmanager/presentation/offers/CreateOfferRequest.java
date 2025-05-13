@@ -1,4 +1,4 @@
-package com.happypaws.backend.offersmanager.presentation;
+package com.happypaws.backend.offersmanager.presentation.offers;
 
 import java.time.LocalDate;
 import java.time.LocalTime;

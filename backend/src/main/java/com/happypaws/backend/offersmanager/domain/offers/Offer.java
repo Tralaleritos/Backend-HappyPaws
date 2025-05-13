@@ -1,4 +1,4 @@
-package com.happypaws.backend.offersmanager.domain;
+package com.happypaws.backend.offersmanager.domain.offers;
 
 import com.happypaws.backend.authentication.domain.User;
 import com.happypaws.backend.petmanager.domain.Pet;

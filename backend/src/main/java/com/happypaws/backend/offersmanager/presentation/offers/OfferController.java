@@ -1,11 +1,11 @@
-package com.happypaws.backend.offersmanager.presentation;
+package com.happypaws.backend.offersmanager.presentation.offers;
 
-import com.happypaws.backend.offersmanager.application.create.CreateOfferCommand;
-import com.happypaws.backend.offersmanager.application.create.CreateOfferCommandHandler;
-import com.happypaws.backend.offersmanager.application.getById.GetOfferByIdQuery;
-import com.happypaws.backend.offersmanager.application.getById.GetOfferByIdQueryHandler;
-import com.happypaws.backend.offersmanager.domain.DateRange;
-import com.happypaws.backend.offersmanager.domain.Location;
+import com.happypaws.backend.offersmanager.application.offers.create.CreateOfferCommand;
+import com.happypaws.backend.offersmanager.application.offers.create.CreateOfferCommandHandler;
+import com.happypaws.backend.offersmanager.application.offers.getById.GetOfferByIdQuery;
+import com.happypaws.backend.offersmanager.application.offers.getById.GetOfferByIdQueryHandler;
+import com.happypaws.backend.offersmanager.domain.offers.DateRange;
+import com.happypaws.backend.offersmanager.domain.offers.Location;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

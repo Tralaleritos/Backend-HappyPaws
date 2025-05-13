@@ -1,8 +1,8 @@
-package com.happypaws.backend.offersmanager.application.create;
+package com.happypaws.backend.offersmanager.application.offers.create;
 
 import com.happypaws.backend.authentication.infrastructure.repositories.UserRepository;
-import com.happypaws.backend.offersmanager.application.OfferMapper;
-import com.happypaws.backend.offersmanager.domain.Offer;
+import com.happypaws.backend.offersmanager.application.offers.OfferMapper;
+import com.happypaws.backend.offersmanager.domain.offers.Offer;
 import com.happypaws.backend.offersmanager.infrastructure.OfferRepository;
 import com.happypaws.backend.petmanager.infrastructure.PetRepository;
 import lombok.RequiredArgsConstructor;

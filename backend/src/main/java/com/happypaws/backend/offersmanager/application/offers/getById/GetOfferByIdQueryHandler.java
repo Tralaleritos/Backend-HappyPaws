@@ -1,7 +1,7 @@
-package com.happypaws.backend.offersmanager.application.getById;
+package com.happypaws.backend.offersmanager.application.offers.getById;
 
-import com.happypaws.backend.offersmanager.application.OfferMapper;
-import com.happypaws.backend.offersmanager.application.create.OfferResponse;
+import com.happypaws.backend.offersmanager.application.offers.OfferMapper;
+import com.happypaws.backend.offersmanager.application.offers.create.OfferResponse;
 import com.happypaws.backend.offersmanager.infrastructure.OfferRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

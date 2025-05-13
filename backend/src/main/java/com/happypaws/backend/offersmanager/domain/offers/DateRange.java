@@ -1,4 +1,4 @@
-package com.happypaws.backend.offersmanager.domain;
+package com.happypaws.backend.offersmanager.domain.offers;
 
 import jakarta.persistence.Embeddable;
 

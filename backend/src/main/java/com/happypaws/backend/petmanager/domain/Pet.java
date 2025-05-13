@@ -2,7 +2,7 @@ package com.happypaws.backend.petmanager.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.happypaws.backend.authentication.domain.User;
-import com.happypaws.backend.offersmanager.domain.Offer;
+import com.happypaws.backend.offersmanager.domain.offers.Offer;
 import jakarta.persistence.*;
 import lombok.*;
 
