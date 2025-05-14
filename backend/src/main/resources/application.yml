@@ -14,10 +14,6 @@ spring:
       hibernate:
         format_sql: true
 
-  sql:
-    init:
-      mode: always
-
   mail:
     username: ${SUPPORT_EMAIL}
     password: ${APP_PASSWORD}
