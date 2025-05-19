@@ -3,6 +3,7 @@ package com.happypaws.backend.authentication.infrastructure.services;
 import com.happypaws.backend.authentication.domain.User;
 import com.happypaws.backend.authentication.infrastructure.repositories.RoleRepository;
 import com.happypaws.backend.authentication.infrastructure.repositories.UserRepository;
+import com.happypaws.backend.authentication.presentation.dtos.AuthUserResponse;
 import com.happypaws.backend.authentication.presentation.dtos.LoginUserDto;
 import com.happypaws.backend.authentication.presentation.dtos.RegisterUserDto;
 import com.happypaws.backend.authentication.presentation.dtos.VerifyUserDto;
@@ -30,6 +31,7 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
     private final EmailService emailService;
     private final RoleRepository roleRepository;
+    private final JwtService jwtService;
 
     public User signUp(RegisterUserDto registerUserDto) {
         var role = roleRepository.findByName(registerUserDto.getRole());
@@ -70,6 +72,28 @@ public class AuthenticationService {
 
         return user;
     }
+
+    public AuthUserResponse me(String token) {
+        final String jwtToken = token.substring(7);
+        final var userEmail = jwtService.getUserEmailFromToken(jwtToken);
+        if (userEmail.isEmpty()) {
+            throw new RuntimeException("Use not found");
+        }
+
+        final var user = userRepository.findByEmail(userEmail);
+        if (user.isEmpty()) {
+            throw new RuntimeException("Use not found");
+        }
+
+        return new AuthUserResponse(
+                user.get().getId(),
+                user.get().getUsername(),
+                user.get().getEmail(),
+                user.get().getPhoneNumber(),
+                user.get().getImgUrl()
+        );
+    }
+
 
     public void verifyUser(VerifyUserDto userDto) {
         Optional<User> optionalUser = userRepository.findByEmail(userDto.getEmail());
