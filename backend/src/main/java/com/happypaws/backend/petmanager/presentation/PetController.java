@@ -1,5 +1,6 @@
 package com.happypaws.backend.petmanager.presentation;
 
+import com.happypaws.backend.authentication.domain.User;
 import com.happypaws.backend.petmanager.application.create.CreatePetCommand;
 import com.happypaws.backend.petmanager.application.create.CreatePetCommandHandler;
 import com.happypaws.backend.petmanager.application.create.CreatePetRequest;
@@ -10,9 +11,14 @@ import com.happypaws.backend.petmanager.application.getById.GetPetByIdQueryHandl
 import com.happypaws.backend.petmanager.application.update.UpdatePetCommand;
 import com.happypaws.backend.petmanager.application.update.UpdatePetCommandHandler;
 import com.happypaws.backend.petmanager.application.update.UpdatePetRequest;
+import com.happypaws.backend.petmanager.domain.Pet;
+import com.happypaws.backend.petmanager.infrastructure.PetRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/pets")
@@ -22,6 +28,17 @@ public class PetController {
     private final UpdatePetCommandHandler updatePetCommandHandler;
     private final GetPetByIdQueryHandler getPetByIdQueryHandler;
     private final DeletePetCommandHandler deletePetCommandHandler;
+    private final PetRepository petRepository;
+
+    @GetMapping("/my")
+    public ResponseEntity<?> getMyPets(@AuthenticationPrincipal User user) {
+        try {
+            List<Pet> pets = petRepository.findAllByOwner(user);
+            return ResponseEntity.ok(pets);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error al obtener las mascotas: " + e.getMessage());
+        }
+    }
 
     @PostMapping
     public ResponseEntity<?> createPet(@RequestBody CreatePetRequest createPetRequest) {
