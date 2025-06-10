@@ -8,17 +8,15 @@ import com.happypaws.backend.petmanager.application.delete.DeletePetCommand;
 import com.happypaws.backend.petmanager.application.delete.DeletePetCommandHandler;
 import com.happypaws.backend.petmanager.application.getById.GetPetByIdQuery;
 import com.happypaws.backend.petmanager.application.getById.GetPetByIdQueryHandler;
+import com.happypaws.backend.petmanager.application.getOwnerPets.GetOwnerPetsQuery;
+import com.happypaws.backend.petmanager.application.getOwnerPets.GetOwnerPetsQueryHandler;
 import com.happypaws.backend.petmanager.application.update.UpdatePetCommand;
 import com.happypaws.backend.petmanager.application.update.UpdatePetCommandHandler;
 import com.happypaws.backend.petmanager.application.update.UpdatePetRequest;
-import com.happypaws.backend.petmanager.domain.Pet;
-import com.happypaws.backend.petmanager.infrastructure.PetRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/pets")
@@ -28,15 +26,16 @@ public class PetController {
     private final UpdatePetCommandHandler updatePetCommandHandler;
     private final GetPetByIdQueryHandler getPetByIdQueryHandler;
     private final DeletePetCommandHandler deletePetCommandHandler;
-    private final PetRepository petRepository;
+    private final GetOwnerPetsQueryHandler getOwnerPetsQueryHandler;
 
     @GetMapping("/my")
     public ResponseEntity<?> getMyPets(@AuthenticationPrincipal User user) {
         try {
-            List<Pet> pets = petRepository.findAllByOwner(user);
+            final var query = new GetOwnerPetsQuery(user.getId());
+            final var pets = getOwnerPetsQueryHandler.handle(query);
             return ResponseEntity.ok(pets);
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Error al obtener las mascotas: " + e.getMessage());
+            return ResponseEntity.badRequest().build();
         }
     }
 
