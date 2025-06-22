@@ -5,6 +5,7 @@ import com.happypaws.backend.authentication.infrastructure.repositories.UserRepo
 import com.happypaws.backend.offersmanager.application.offers.OfferMapper;
 import com.happypaws.backend.offersmanager.domain.offers.Offer;
 import com.happypaws.backend.offersmanager.infrastructure.repositories.OfferRepository;
+import com.happypaws.backend.offersmanager.infrastructure.repositories.ServiceRepository;
 import com.happypaws.backend.offersmanager.infrastructure.socketcontroller.NotificationController;
 import com.happypaws.backend.petmanager.infrastructure.PetRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +25,7 @@ public class CreateOfferCommandHandler {
     private final PetRepository petRepository;
     private final NotificationController notificationController;
     private final AvailableCaregivers availableCaregivers;
+    private final ServiceRepository serviceRepository;
 
     public OfferResponse handle(final CreateOfferCommand command) {
         final var owner = userRepository.findById(command.ownerId());
@@ -38,12 +40,20 @@ public class CreateOfferCommandHandler {
             throw new RuntimeException("Pets not found");
         }
 
+        final var services = serviceRepository.findAllById(command.services());
+
+        if (services.isEmpty()) {
+            throw new RuntimeException("Services not found");
+        }
+
         final var offer = Offer.Create(
                 command.location(),
                 command.description(),
                 command.range(),
                 owner.get(),
-                pets
+                pets,
+                command.price(),
+                services
         );
 
         final var offerSaved = offerRepository.save(offer);

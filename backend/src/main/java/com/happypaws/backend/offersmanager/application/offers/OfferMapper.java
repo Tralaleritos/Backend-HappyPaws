@@ -9,6 +9,7 @@ public class OfferMapper {
     public static OfferResponse fromEntity(final Offer offer) {
         return new OfferResponse(
                 offer.getId(),
+                offer.getPrice(),
                 offer.getDescription(),
                 offer.getLocation(),
                 offer.getRange(),
@@ -17,7 +18,8 @@ public class OfferMapper {
                         offer.getOwner().getId(),
                         offer.getOwner().getUsername(),
                         offer.getOwner().getImgUrl()
-                )
+                ),
+                offer.getServices().stream().map(ServiceMapper::fromEntity).toList()
         );
     }
 }

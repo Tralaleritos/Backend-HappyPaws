@@ -87,7 +87,7 @@ public class AuthenticationService {
 
         return new AuthUserResponse(
                 user.get().getId(),
-                user.get().getUsername(),
+                user.get().getUserName(),
                 user.get().getEmail(),
                 user.get().getPhoneNumber(),
                 user.get().getImgUrl()

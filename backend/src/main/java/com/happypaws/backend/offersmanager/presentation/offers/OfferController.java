@@ -6,6 +6,7 @@ import com.happypaws.backend.offersmanager.application.offers.getById.GetOfferBy
 import com.happypaws.backend.offersmanager.application.offers.getById.GetOfferByIdQueryHandler;
 import com.happypaws.backend.offersmanager.domain.offers.DateRange;
 import com.happypaws.backend.offersmanager.domain.offers.Location;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,14 +20,16 @@ public class OfferController {
     private final GetOfferByIdQueryHandler getOfferByIdQueryHandler;
 
     @PostMapping
-    public ResponseEntity<?> createOffer(@RequestBody CreateOfferRequest request) {
+    public ResponseEntity<?> createOffer(@RequestBody @Valid CreateOfferRequest request) {
         try {
             final var command = new CreateOfferCommand(
                     request.ownerId(),
                     new Location(request.locationName(), request.locationLatitude(), request.locationLongitude()),
                     request.description(),
                     new DateRange(request.date(), request.startTime(), request.endTime()),
-                    request.pets()
+                    request.pets(),
+                    request.price(),
+                    request.services()
             );
             final var response = createOfferCommandHandler.handle(command);
             return new ResponseEntity<>(response, HttpStatus.CREATED);

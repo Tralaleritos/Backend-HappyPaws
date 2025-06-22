@@ -6,6 +6,7 @@ import com.happypaws.backend.shared.domain.Auditable;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,6 +37,16 @@ public class Offer extends Auditable {
     @Embedded
     private DateRange range;
 
+    private BigDecimal price;
+
+    @ManyToMany
+    @JoinTable(
+            name = "offers_services",
+            joinColumns = @JoinColumn(name = "offer_id"),
+            inverseJoinColumns = @JoinColumn(name = "service_id")
+    )
+    private List<Service> services = new ArrayList<>();
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "owner_id", nullable = false)
     private User owner;
@@ -48,7 +59,14 @@ public class Offer extends Auditable {
     )
     private List<Pet> pets = new ArrayList<>();
 
-    public static Offer Create(Location location, String description, DateRange range, User owner, List<Pet> pets) {
+    public static Offer Create(Location location,
+                               String description,
+                               DateRange range,
+                               User owner,
+                               List<Pet> pets,
+                               BigDecimal price,
+                               List<Service> services
+    ) {
         return Offer.builder()
                 .location(location)
                 .description(description)
@@ -56,6 +74,8 @@ public class Offer extends Auditable {
                 .owner(owner)
                 .pets(pets)
                 .status(OfferStatus.PENDING)
+                .price(price)
+                .services(services)
                 .build();
     }
 

@@ -70,4 +70,18 @@ public class User extends Auditable implements UserDetails {
     public String getUsername() {
         return email;
     }
+
+    public String getUserName() { return username; }
+
+    public void update(
+            String username,
+            String email,
+            String phoneNumber,
+            String imgUrl
+    ) {
+        this.username = username;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.imgUrl = imgUrl;
+    }
 }
