@@ -2,6 +2,7 @@ package com.happypaws.backend.offersmanager.infrastructure.socketcontroller;
 
 import com.happypaws.backend.authentication.domain.User;
 import com.happypaws.backend.authentication.infrastructure.repositories.UserRepository;
+import com.happypaws.backend.authentication.presentation.dtos.CaregiversNearbyResponse;
 import com.happypaws.backend.authentication.presentation.dtos.UserResponse;
 import com.happypaws.backend.offersmanager.application.offers.create.OfferResponse;
 import lombok.RequiredArgsConstructor;
@@ -26,12 +27,13 @@ public class NotificationController {
         final var caregiver = userRepository.findById(caregiverId).orElseThrow(() -> new RuntimeException("caregiver not found"));
 
         for (User owner : nearbyOwners) {
-            System.out.println("Owner: " + owner);
             messagingTemplate.convertAndSend("/topic/notifications/" + owner.getId(),
-                    new UserResponse(
+                    new CaregiversNearbyResponse(
                             caregiver.getId(),
                             caregiver.getUserName(),
-                            caregiver.getImgUrl()
+                            caregiver.getImgUrl(),
+                            caregiverLat,
+                            caregiverLon
                     ));
         }
     }
