@@ -22,4 +22,8 @@ public class Service {
 
     @ManyToMany(mappedBy = "services", fetch = FetchType.LAZY)
     private List<Offer> offers = new ArrayList<>();
+
+    public static Service Create(String name, String description) {
+        return Service.builder().name(name).description(description).build();
+    }
 }

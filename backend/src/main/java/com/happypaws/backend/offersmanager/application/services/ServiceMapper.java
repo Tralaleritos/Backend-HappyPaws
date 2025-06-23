@@ -1,6 +1,6 @@
-package com.happypaws.backend.offersmanager.application.offers;
+package com.happypaws.backend.offersmanager.application.services;
 
-import com.happypaws.backend.offersmanager.application.offers.create.ServiceResponse;
+import com.happypaws.backend.offersmanager.application.services.create.ServiceResponse;
 import com.happypaws.backend.offersmanager.domain.offers.Service;
 
 public class ServiceMapper {

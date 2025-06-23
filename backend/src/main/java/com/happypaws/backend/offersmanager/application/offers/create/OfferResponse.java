@@ -1,6 +1,7 @@
 package com.happypaws.backend.offersmanager.application.offers.create;
 
 import com.happypaws.backend.authentication.presentation.dtos.UserResponse;
+import com.happypaws.backend.offersmanager.application.services.create.ServiceResponse;
 import com.happypaws.backend.offersmanager.domain.offers.DateRange;
 import com.happypaws.backend.offersmanager.domain.offers.Location;
 import com.happypaws.backend.petmanager.application.create.PetResponse;
