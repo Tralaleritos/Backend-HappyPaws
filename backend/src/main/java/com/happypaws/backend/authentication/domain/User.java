@@ -42,6 +42,12 @@ public class User extends Auditable implements UserDetails {
     @Column(nullable = false)
     private String password;
 
+    @Column(columnDefinition = "double precision default -77.0428")
+    private double longitude;
+
+    @Column(columnDefinition = "double precision default -12.0464")
+    private double latitude;
+
     @OneToMany(mappedBy = "owner")
     @JsonIgnore
     private List<Pet> pets = new ArrayList<>();
@@ -83,5 +89,10 @@ public class User extends Auditable implements UserDetails {
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.imgUrl = imgUrl;
+    }
+
+    public void updateLocation(double latitude, double longitude) {
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 }

@@ -1,11 +1,15 @@
 package com.happypaws.backend.authentication.presentation;
 
+import com.happypaws.backend.authentication.application.users.location.UpdateUserLocationCommand;
+import com.happypaws.backend.authentication.application.users.location.UpdateUserLocationCommandHandler;
 import com.happypaws.backend.authentication.application.users.update.UpdateUserCommand;
 import com.happypaws.backend.authentication.application.users.update.UpdateUserCommandHandler;
 import com.happypaws.backend.authentication.infrastructure.services.AuthenticationService;
+import com.happypaws.backend.authentication.presentation.dtos.UpdateUserLocationRequest;
 import com.happypaws.backend.authentication.presentation.dtos.UpdateUserRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -14,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
     private final AuthenticationService authenticationService;
     private final UpdateUserCommandHandler updateUserCommandHandler;
+    private final UpdateUserLocationCommandHandler updateUserLocationCommandHandler;
 
     @GetMapping("/me")
     public ResponseEntity<?> geUserFromToken(
@@ -40,6 +45,24 @@ public class UserController {
                     updateUserRequest.phoneNumber(),
                     updateUserRequest.imgUrl());
             updateUserCommandHandler.handle(command);
+            return ResponseEntity.noContent().build();
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @PreAuthorize("hasAuthority('OWNER')")
+    @PutMapping("{id}/location")
+    public ResponseEntity<?> updateUser(
+            @PathVariable("id") long id,
+            @RequestBody UpdateUserLocationRequest updateUserLocationRequest
+    ) {
+        try {
+            final var command = new UpdateUserLocationCommand(
+                    id,
+                    updateUserLocationRequest.latitude(),
+                    updateUserLocationRequest.longitude());
+            updateUserLocationCommandHandler.handle(command);
             return ResponseEntity.noContent().build();
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
