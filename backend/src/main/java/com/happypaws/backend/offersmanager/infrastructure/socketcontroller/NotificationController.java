@@ -2,8 +2,8 @@ package com.happypaws.backend.offersmanager.infrastructure.socketcontroller;
 
 import com.happypaws.backend.authentication.domain.User;
 import com.happypaws.backend.authentication.infrastructure.repositories.UserRepository;
+import com.happypaws.backend.authentication.presentation.dtos.CaregiverUnavailableResponse;
 import com.happypaws.backend.authentication.presentation.dtos.CaregiversNearbyResponse;
-import com.happypaws.backend.authentication.presentation.dtos.UserResponse;
 import com.happypaws.backend.offersmanager.application.offers.create.OfferResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -23,18 +23,25 @@ public class NotificationController {
 
     public void notifyNearbyPetOwners(long caregiverId, double caregiverLat, double caregiverLon) {
         List<User> nearbyOwners = userRepository.findNearbyPetOwners(caregiverLat, caregiverLon);
-
-        final var caregiver = userRepository.findById(caregiverId).orElseThrow(() -> new RuntimeException("caregiver not found"));
+        var caregiver = userRepository.findById(caregiverId)
+                .orElseThrow(() -> new RuntimeException("caregiver not found"));
 
         for (User owner : nearbyOwners) {
             messagingTemplate.convertAndSend("/topic/notifications/" + owner.getId(),
-                    new CaregiversNearbyResponse(
-                            caregiver.getId(),
-                            caregiver.getUserName(),
-                            caregiver.getImgUrl(),
-                            caregiverLat,
-                            caregiverLon
-                    ));
+                    new CaregiversNearbyResponse(caregiver.getId(), caregiver.getUserName(),
+                            caregiver.getImgUrl(), caregiverLat, caregiverLon));
+        }
+    }
+
+    // NUEVO: Notificar cuando un caregiver se vuelve no disponible
+    public void notifyNearbyPetOwnersUnavailable(long caregiverId, double caregiverLat, double caregiverLon) {
+        List<User> nearbyOwners = userRepository.findNearbyPetOwners(caregiverLat, caregiverLon);
+        var caregiver = userRepository.findById(caregiverId)
+                .orElseThrow(() -> new RuntimeException("caregiver not found"));
+
+        for (User owner : nearbyOwners) {
+            messagingTemplate.convertAndSend("/topic/notifications/" + owner.getId(),
+                    new CaregiverUnavailableResponse(caregiver.getId()));
         }
     }
 }
