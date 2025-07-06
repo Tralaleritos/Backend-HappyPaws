@@ -51,6 +51,10 @@ public class Offer extends Auditable {
     @JoinColumn(name = "owner_id", nullable = false)
     private User owner;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "caregiver_id")
+    private User caregiver;
+
     @ManyToMany
     @JoinTable(
             name = "offers_pets",
@@ -58,6 +62,9 @@ public class Offer extends Auditable {
             inverseJoinColumns = @JoinColumn(name = "pet_id")
     )
     private List<Pet> pets = new ArrayList<>();
+
+    @Version
+    private Long version;
 
     public static Offer Create(Location location,
                                String description,
@@ -82,7 +89,25 @@ public class Offer extends Auditable {
     public void cancel() {
         if (status == OfferStatus.PENDING) {
             status = OfferStatus.CANCELED;
+            return;
         }
         throw new RuntimeException("Invalid offer cancelled");
+    }
+
+    public void accept(User caregiver) {
+        if (status == OfferStatus.PENDING) {
+            status = OfferStatus.ACCEPTED;
+            this.caregiver = caregiver;
+            return;
+        }
+        throw new RuntimeException("Invalid offer accepted");
+    }
+
+    public void complete() {
+        if (status == OfferStatus.ACCEPTED) {
+            status = OfferStatus.COMPLETED;
+            return;
+        }
+        throw new RuntimeException("Invalid offer completed");
     }
 }

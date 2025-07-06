@@ -95,4 +95,9 @@ public class User extends Auditable implements UserDetails {
         this.latitude = latitude;
         this.longitude = longitude;
     }
+
+    public boolean isCaregiver() {
+        return this.getRoles().stream()
+                .anyMatch(r -> r.getName().equals("CAREGIVER"));
+    }
 }

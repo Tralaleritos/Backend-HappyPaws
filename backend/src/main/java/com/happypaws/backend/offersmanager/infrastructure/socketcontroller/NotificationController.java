@@ -4,6 +4,7 @@ import com.happypaws.backend.authentication.domain.User;
 import com.happypaws.backend.authentication.infrastructure.repositories.UserRepository;
 import com.happypaws.backend.authentication.presentation.dtos.CaregiverUnavailableResponse;
 import com.happypaws.backend.authentication.presentation.dtos.CaregiversNearbyResponse;
+import com.happypaws.backend.offersmanager.application.offers.accept.OfferAcceptedResponse;
 import com.happypaws.backend.offersmanager.application.offers.create.OfferResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -44,4 +45,28 @@ public class NotificationController {
                     new CaregiverUnavailableResponse(caregiver.getId()));
         }
     }
+
+    public void notifyOfferAccepted(long ownerId, OfferAcceptedResponse offerResponse) {
+        messagingTemplate.convertAndSend("/topic/offers/" + ownerId, offerResponse);
+    }
+
+    public void notifyOfferUnavailable(long caregiverId, long offerId, String message) {
+        var response = new OfferUnavailableResponse(offerId, message);
+        messagingTemplate.convertAndSend("/topic/offer-unavailable/" + caregiverId, response);
+    }
+
+    public void notifyOfferCompleted(long ownerId, long offerId, String message) {
+        var response = new OfferCompletedResponse(offerId, message);
+        messagingTemplate.convertAndSend("/topic/offer-completed/" + ownerId, response);
+    }
+
+    public record OfferUnavailableResponse(
+            long offerId,
+            String message
+    ) {}
+
+    public record OfferCompletedResponse(
+            long offerId,
+            String message
+    ) {}
 }
