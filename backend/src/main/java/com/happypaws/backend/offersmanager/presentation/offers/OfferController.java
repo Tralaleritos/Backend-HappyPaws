@@ -89,7 +89,6 @@ public class OfferController {
         }
     }
 
-    @PreAuthorize("hasAuthority('CAREGIVER')")
     @PostMapping("{id}/complete")
     public ResponseEntity<?> completeOffer(@PathVariable long id) {
         try {
@@ -105,7 +104,7 @@ public class OfferController {
     }
 
     @PostMapping("/direct-offer")
-    public ResponseEntity<?> directOfferToCaregiver(final DirectOfferRequest request) {
+    public ResponseEntity<?> directOfferToCaregiver(@Valid @RequestBody final DirectOfferRequest request) {
         try {
             final var command = new DirectOfferCommand(
                     request.ownerId(),
