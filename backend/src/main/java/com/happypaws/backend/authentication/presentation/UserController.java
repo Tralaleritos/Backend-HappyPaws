@@ -1,7 +1,7 @@
 package com.happypaws.backend.authentication.presentation;
 
-import com.happypaws.backend.authentication.application.users.getOwnerDetail.GetOwnerDetailQuery;
-import com.happypaws.backend.authentication.application.users.getOwnerDetail.GetOwnerDetailQueryHandler;
+import com.happypaws.backend.authentication.application.users.getAllOwners.GetAllOwnersQuery;
+import com.happypaws.backend.authentication.application.users.getAllOwners.GetAllOwnersQueryHandler;
 import com.happypaws.backend.authentication.application.users.location.UpdateUserLocationCommand;
 import com.happypaws.backend.authentication.application.users.location.UpdateUserLocationCommandHandler;
 import com.happypaws.backend.authentication.application.users.update.UpdateUserCommand;
@@ -21,7 +21,7 @@ public class UserController {
     private final AuthenticationService authenticationService;
     private final UpdateUserCommandHandler updateUserCommandHandler;
     private final UpdateUserLocationCommandHandler updateUserLocationCommandHandler;
-    private final GetOwnerDetailQueryHandler getOwnerDetailQueryHandler;
+    private final GetAllOwnersQueryHandler getAllOwnersQueryHandler;
 
     @GetMapping("/me")
     public ResponseEntity<?> geUserFromToken(
@@ -36,11 +36,11 @@ public class UserController {
     }
 
     @PreAuthorize("hasAnyAuthority('CAREGIVER')")
-    @GetMapping("/owners/{id}/details")
-    public ResponseEntity<?> getOwnerDetails(@PathVariable("id") long id) {
+    @GetMapping("/owners/details")
+    public ResponseEntity<?> getAllOwnersDetails() {
         try {
-            final var query = new GetOwnerDetailQuery(id);
-            final var response = getOwnerDetailQueryHandler.handle(query);
+            final var query = new GetAllOwnersQuery();
+            final var response = getAllOwnersQueryHandler.handle(query);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
