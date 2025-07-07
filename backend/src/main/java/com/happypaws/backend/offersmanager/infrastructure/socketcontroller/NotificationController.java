@@ -47,7 +47,7 @@ public class NotificationController {
     }
 
     public void notifyOfferAccepted(long ownerId, OfferAcceptedResponse offerResponse) {
-        messagingTemplate.convertAndSend("/topic/offers/" + ownerId, offerResponse);
+        messagingTemplate.convertAndSend("/topic/offers-accepted/" + ownerId, offerResponse);
     }
 
     public void notifyOfferUnavailable(long caregiverId, long offerId, String message) {

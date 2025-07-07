@@ -8,6 +8,8 @@ import com.happypaws.backend.offersmanager.application.offers.create.CreateOffer
 import com.happypaws.backend.offersmanager.application.offers.create.CreateOfferCommandHandler;
 import com.happypaws.backend.offersmanager.application.offers.directOffer.DirectOfferCommand;
 import com.happypaws.backend.offersmanager.application.offers.directOffer.DirectOfferCommandHandler;
+import com.happypaws.backend.offersmanager.application.offers.getAccepted.GetAcceptedOffersQuery;
+import com.happypaws.backend.offersmanager.application.offers.getAccepted.GetAcceptedOffersQueryHandler;
 import com.happypaws.backend.offersmanager.application.offers.getById.GetOfferByIdQuery;
 import com.happypaws.backend.offersmanager.application.offers.getById.GetOfferByIdQueryHandler;
 import com.happypaws.backend.offersmanager.domain.offers.DateRange;
@@ -28,6 +30,7 @@ public class OfferController {
     private final AcceptOfferCommandHandler acceptOfferCommandHandler;
     private final CompleteOfferCommandHandler completeOfferCommandHandler;
     private final DirectOfferCommandHandler directOfferCommandHandler;
+    private final GetAcceptedOffersQueryHandler getAcceptedOffersQueryHandler;
 
     @PostMapping
     public ResponseEntity<?> createOffer(@RequestBody @Valid CreateOfferRequest request) {
@@ -56,6 +59,17 @@ public class OfferController {
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("/accepted/{userId}")
+    public ResponseEntity<?> getAcceptedOffers(@PathVariable("userId") long userId) {
+        try {
+            final var query = new GetAcceptedOffersQuery(userId);
+            final var response = getAcceptedOffersQueryHandler.handle(query);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
